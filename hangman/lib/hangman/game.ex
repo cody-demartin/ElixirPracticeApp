@@ -10,4 +10,14 @@ defmodule Hangman.Game do
       letters: Dictionary.random_word() |> String.codepoints()
     }
   end
+
+  def make_move(game = %{ game_state: :won}, _guess) do
+    { game, tally(game) }
+  end
+
+  def tally(_game) do
+    1234
+  end
+
+
 end

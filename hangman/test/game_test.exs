@@ -47,7 +47,7 @@ defmodule GameTest do
     assert game.turns_left == 6
   end
 
-  
+
 
 
 

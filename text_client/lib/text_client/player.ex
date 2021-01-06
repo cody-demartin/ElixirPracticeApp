@@ -20,10 +20,14 @@ defmodule TextClient.Player do
     continue_with_message(game, "Sorry bad guess!")
   end
 
-  defp exit_with_message(msg) do
-    IO.puts(msg)
-    exit(:normal)
+  def play(game = %State{tally: %{ game_state: :already_used} }) do
+    continue_with_message(game, "Already guessed")
   end
+
+  def play(game) do
+    continue(game)
+  end
+
 
   def continue_with_message(game, message) do
     IO.puts(message)
@@ -31,9 +35,30 @@ defmodule TextClient.Player do
   end
 
   def continue(game) do
-
-
+    game
+    |> display()
+    |> prompt()
+    |> make_move()
+    |> play()
   end
+
+  def display(game) do
+    game
+  end
+
+  def prompt(game) do
+    game
+  end
+
+  def make_move(game) do
+    game
+  end
+
+  defp exit_with_message(msg) do
+    IO.puts(msg)
+    exit(:normal)
+  end
+
 
 
 

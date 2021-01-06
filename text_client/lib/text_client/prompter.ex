@@ -21,7 +21,7 @@ defmodule TextClient.Prompter do
     input = String.trim(input)
     cond do
       input =~ ~r/\A[a-z]\z/ ->
-        Map.put(game, :guess, input)
+        Map.put(game, :guessed, input)
       true ->
         IO.puts("please enter a single lowercase letter")
         accept_move(game)

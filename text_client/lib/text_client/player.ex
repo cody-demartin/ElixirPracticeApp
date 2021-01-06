@@ -1,6 +1,6 @@
 defmodule TextClient.Player do
 
-  alias TextClient.State
+  alias TextClient.{State, Summary}
 
 
   # won, lost, good guess, bad guess, already used, initializing - cases
@@ -36,7 +36,7 @@ defmodule TextClient.Player do
 
   def continue(game) do
     game
-    |> display()
+    |> Summary.display()
     |> prompt()
     |> make_move()
     |> play()

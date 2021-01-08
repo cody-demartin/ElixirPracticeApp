@@ -6,14 +6,14 @@ defmodule Hangman.Game do
     used: MapSet.new()
   )
 
-
   def new_game(word) do
     %Hangman.Game{
       letters: word |> String.codepoints()
     }
   end
+
   def new_game() do
-    new_game(Dictionary.random_word)
+    new_game(Dictionary.random_word())
   end
 
   def make_move(game = %{game_state: state}, _guess) when state in [:won, :lost] do
@@ -28,13 +28,11 @@ defmodule Hangman.Game do
     %{
       game_state: game.game_state,
       turns_left: game.turns_left,
-      letters:    game.letters |> reveal_guessed(game.used)
+      letters: game.letters |> reveal_guessed(game.used)
     }
   end
 
-
-###################################################################################
-
+  ###################################################################################
 
   defp accept_move(game, _guess, _already_guessed = true) do
     Map.put(game, :game_state, :already_used)
@@ -46,35 +44,30 @@ defmodule Hangman.Game do
   end
 
   defp score_guess(game, _good_guess = true) do
-    new_state = MapSet.new(game.letters)
-    |> MapSet.subset?(game.used)
-    |> maybe_won()
+    new_state =
+      MapSet.new(game.letters)
+      |> MapSet.subset?(game.used)
+      |> maybe_won()
+
     Map.put(game, :game_state, new_state)
   end
 
-  defp score_guess(game = %{ turns_left: 1 }, _bad_guess) do
+  defp score_guess(game = %{turns_left: 1}, _bad_guess) do
     Map.put(game, :game_state, :lost)
   end
 
-  defp score_guess(game = %{ turns_left: turns_left }, _bad_guess) do
-    %{ game |
-      game_state: :bad_guess,
-      turns_left: turns_left - 1
-    }
+  defp score_guess(game = %{turns_left: turns_left}, _bad_guess) do
+    %{game | game_state: :bad_guess, turns_left: turns_left - 1}
   end
-
-
 
   defp reveal_guessed(letters, used) do
     letters
     |> Enum.map(fn letter -> reveal_letter(letter, MapSet.member?(used, letter)) end)
   end
 
-  defp reveal_letter(letter, _in_word = true ), do: letter
+  defp reveal_letter(letter, _in_word = true), do: letter
   defp reveal_letter(_letter, _not_in_word = false), do: "_"
 
   defp maybe_won(true), do: :won
   defp maybe_won(_), do: :good_guess
-
-
 end

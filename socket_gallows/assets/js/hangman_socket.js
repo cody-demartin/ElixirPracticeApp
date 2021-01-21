@@ -1,4 +1,5 @@
 import { Socket } from "phoenix"
+
 export default class HangmanSocket {
 
     constructor() {
